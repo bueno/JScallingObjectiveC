@@ -1,10 +1,17 @@
 <html>
 	<head>
-		<script type="text/javascript">
-            window.location = "js-call:closeWindow";
-		</script>
+        <script type='text/javascript'>
+            function callNativeFunction()
+            {
+                window.location = 'js-call:callNativeFunction';
+            }
+        </script>
 	</head>
-	<body>
-		<h1>JS<h1>
-	</body>
+    <body>
+        <h2 style = "font-size:16px;" align='center'>This button below is an HTML component. When you click the button, an Objective-C function is called.</h2>
+        <br/>
+        <center>
+            <input type='button' style='width:50%;height:50px;' onclick='callNativeFunction()' value='Click me!'>
+        </center>
+    </body>
 </html>

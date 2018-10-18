@@ -14,38 +14,33 @@
 
 @implementation ViewController
 
-// In Objective-C
--(void) viewDidLoad
-{
-    self.webView = [[UIWebView alloc] init];
-    self.webView.delegate = self;
-    
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:[[NSBundle mainBundle]                                                                          pathForResource:@"test" ofType:@"html"]isDirectory:NO]]];
-    
+- (void) viewDidLoad {
+    [super viewDidLoad];
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:[[NSBundle mainBundle]                                                                          pathForResource:@"test" ofType:@"html"]isDirectory:NO]];
+    [self.webView setDelegate:self];
+    [self.webView loadRequest:request];
+}
+
+- (void)calledNativeFunction {
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"It is working! This is an Objective-C function...." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
+}
+
+#pragma mark - UIWebViewDelegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    // Intercept custom location change, URL begins with "js-call:"
     if ([[[request URL] absoluteString] hasPrefix:@"js-call:"]) {
-        
-        // Extract the selector name from the URL
-        NSArray *components = [[[request URL] absoluteString] componentsSeparatedByString:@":"];
-        NSString *function = [components objectAtIndex:1];
-        [self performSelector:NSSelectorFromString(function)];
-        
-//        [self performSelector:NSSelectorFromString(@"closeView")];
-
+        [self performSelector:@selector(calledNativeFunction)];
         return NO;
     }
-    
-    return YES;    
-}
-
-- (void)closeWindow {
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention" message:@"It is working! I'm gonna close the window..." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [alert show];
+    return YES;
 }
 
 @end
