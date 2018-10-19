@@ -24,10 +24,7 @@
     
 }
 
-// This function is called on all location change :
-- (BOOL)webView:(UIWebView *)webView2
-shouldStartLoadWithRequest:(NSURLRequest *)request
- navigationType:(UIWebViewNavigationType)navigationType {
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     // Intercept custom location change, URL begins with "js-call:"
     if ([[[request URL] absoluteString] hasPrefix:@"js-call:"]) {
@@ -35,10 +32,9 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
         // Extract the selector name from the URL
         NSArray *components = [[[request URL] absoluteString] componentsSeparatedByString:@":"];
         NSString *function = [components objectAtIndex:1];
-        
-        // Call the given selector
-//        [self performSelector:NSSelectorFromString(@"closeView")];
         [self performSelector:NSSelectorFromString(function)];
+        
+//        [self performSelector:NSSelectorFromString(@"closeView")];
 
         return NO;
     }
